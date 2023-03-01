@@ -14,7 +14,14 @@ if st.button("Calculate"):
         result = num1 - num2
     elif operation == "Multiplication":
         result = num1 * num2
-    else:
-        result = num1 / num2
-    
+    elif operation == "Division":
+        if num2 != 0:
+            result = num1 / num2
+        else:
+            st.warning("Division by 0 error. Please enter a non-zero number as divisor.")
+            result = "Not defined"
     st.success(f"Result is {result}")
+
+    st.write("---")
+st.write("created by __")
+st.write("       Shib Kumar Saraf ")
