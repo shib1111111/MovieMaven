@@ -56,7 +56,7 @@ st.markdown(
 )
 
 # Display the app title and input field
-st.title("Movie Details")
+st.title("MovieMaven")
 st.write('Enter a movie title (e.g. "The Godfather")')
 movie_title = st.text_input("", "")
 
@@ -80,7 +80,7 @@ if st.button("Search"):
                 st.image(movie["full-size cover url"], use_column_width=True)
             with col2:
                 st.markdown(
-                    f"<h2 class='movie-details'>{movie['title']} ({movie['year']})</h2>",
+                    f"<h2 class='Movie Details'>{movie['title']} ({movie['year']})</h2>",
                     unsafe_allow_html=True,
                 )
                 st.write("**Rating:**", movie["rating"])
@@ -107,3 +107,39 @@ if st.button("Search"):
                     st.write("  ")
         else:
             st.write(f"No movie found with the title '{movie_title}'")
+
+
+
+
+
+signature = '''
+<div style="text-align: center; margin-top: 3rem;">
+  <p style="font-size: 1.5rem; font-weight: bold;">Made by <span id="signature">Made by Shib Kumar Saraf</span></p>
+</div>
+
+<style>
+  #signature {
+    animation: colorchange 10s infinite;
+    -webkit-animation: colorchange 10s infinite;
+  }
+
+  @keyframes colorchange {
+    0%   {color: #007bff;}
+    25%  {color: #ff9800;}
+    50%  {color: #9c27b0;}
+    75%  {color: #4caf50;}
+    100% {color: #007bff;}
+  }
+
+  @-webkit-keyframes colorchange {
+    0%   {color: #007bff;}
+    25%  {color: #ff9800;}
+    50%  {color: #9c27b0;}
+    75%  {color: #4caf50;}
+    100% {color: #007bff;}
+  }
+</style>
+'''
+
+st.markdown(signature, unsafe_allow_html=True)
+
