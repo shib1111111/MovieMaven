@@ -1,4 +1,3 @@
-SHIB KUMAR SARAF
 import streamlit as st
 
 # Set up the Streamlit app
