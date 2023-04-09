@@ -1,5 +1,5 @@
 # MovieMaven
 
+This is a Streamlit app called "MovieMaven" that allows users to search for a movie by its title and displays various details about the movie, such as its rating, genres, plot, directors, cast, writers, production companies, box office gross, budget, and recommendations. The app uses the IMDbPy library to search for movies and retrieve their details. It also includes custom CSS to style the user interface. The app is intended to provide movie enthusiasts with an easy way to explore information about movies they are interested in.
 
-This app is a movie details search engine built using Python and Streamlit. It allows users to enter a movie title and retrieve information such as the movie's rating, year, plot, top 10 cast members, and top 5 recommendations. The app uses the IMDb module to search for and retrieve movie details, and it displays the results in a visually appealing format using Streamlit's built-in layout functions and custom CSS styling.
 the link for this app to host or use is https://shib1111111-moviemaven-app-ezbhuv.streamlit.app/
