@@ -8,7 +8,7 @@ st.markdown(
     """
     <style>
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Segoe UI', 'Tahoma', Geneva, Verdana, sans-serif;
         color: #333;
         background-color: #f5f5f5;
     }
