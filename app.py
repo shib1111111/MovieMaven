@@ -112,10 +112,11 @@ if st.button("Search"):
                 # Display the writers
                 writers = movie.get('writers')
                 if writers:
-                    writers_str = [writer["name"] for writer in writers if isinstance(writer, dict)]
+                    writers_str = [writer.get('name') if writer else '' for writer in writers]
                     st.write("**Writers:**", ", ".join(writers_str))
                 else:
                      st.write("**Writers:** N/A")
+
 
 
                 # Display the production companies
