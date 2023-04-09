@@ -24,6 +24,9 @@ sqrt_btn = st.button("√")
 sin_btn = st.button("sin")
 cos_btn = st.button("cos")
 tan_btn = st.button("tan")
+log_btn = st.button("log")
+exp_btn = st.button("exp")
+clear_btn = st.button("C")
 
 # Performing the selected operation
 if sin_btn:
@@ -38,6 +41,12 @@ elif tan_btn:
 elif sqrt_btn:
     result = math.sqrt(num1)
     st.success(f"√({num1}) = {result:.2f}")
+elif log_btn:
+    result = math.log10(num1)
+    st.success(f"log({num1}) = {result:.2f}")
+elif exp_btn:
+    result = math.exp(num1)
+    st.success(f"exp({num1}) = {result:.2f}")
 else:
     if add_btn:
         result = num1 + num2
@@ -69,8 +78,8 @@ if result is None:
     st.info("Perform an operation to see the result.")
 
 # Adding a clear button to reset the calculator
-if st.button("Clear"):
+if clear_btn:
     st.experimental_rerun()
 
-st.write("---")
-st.write("Created by Shib Kumar Saraf")
+# Importing the CSS file
+st.markdown('<link rel="stylesheet" href="style.css">', unsafe_allow_html=True)
