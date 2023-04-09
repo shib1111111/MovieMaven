@@ -14,15 +14,21 @@ st.title('Movie Recommender System')
 # Ask user for their favorite movie
 user_movie = st.text_input('Enter your favorite movie:')
 
-# Search for the movie on IMDb
-try:
-    search_results = ia.search_movie(user_movie)
-    movie_id = search_results[0].getID()
-    movie = ia.get_movie(movie_id)
-except:
-    st.write('Movie not found. Please try again.')
-    movie_id = None
+# Create a button for searching the movie
+search_button = st.button('Search')
 
+# Initialize a spinner
+with st.spinner('Searching for the movie...'):
+    # Search for the movie on IMDb
+    try:
+        search_results = ia.search_movie(user_movie)
+        movie_id = search_results[0].getID()
+        movie = ia.get_movie(movie_id)
+    except:
+        st.write('Movie not found. Please try again.')
+        movie_id = None
+
+# If movie is found, display the details and recommend similar movies
 if movie_id is not None:
     # Get the movie details and ratings
     title = movie.get('title')
