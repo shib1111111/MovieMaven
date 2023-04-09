@@ -70,7 +70,7 @@ st.markdown(
 # Displaying the app title and input field
 st.title("MovieMaven")
 #st.write('Enter a movie title (e.g. "The Godfather")')
-movie_title = st.text_input("Enter a movie title (e.g. 'The Godfather')", "", key="input", css="animated-input")
+movie_title = st.text_input("Enter a movie title (e.g. 'The Godfather')", value="", key="input", css="animated-input")
 
 # Handling the search button click
 if st.button("Search", class_="animated-button"):
