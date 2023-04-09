@@ -107,7 +107,7 @@ if st.button('Search'):
             # Display recommendations, if available
             if 'recommendations' in movie:
                 st.write('**Top 5 Recommendations:**')
-                for i, recommendation in enumerate(movie['['recommendations'][:5]):
+                for i, recommendation in enumerate(movie['recommendations'][:5]):
                          st.write(f'{i+1}. {recommendation["title"]} ({recommendation["year"]})')
             else:
                 st.write('  ')
