@@ -1,82 +1,49 @@
-import pandas as pd
-import numpy as np
-from scipy.sparse import csr_matrix
-from sklearn.neighbors import NearestNeighbors
 import streamlit as st
-from imdb import IMDb
+import imdb
 
-# Initialize IMDbPY library
-ia = IMDb()
+# Initialize the IMDbPY module
+imdb_object = imdb.IMDb()
 
-# Create a Streamlit app
-st.title('Movie Recommender System')
-
-# Ask user for their favorite movie
-user_movie = st.text_input('Enter your favorite movie:')
-
-# Create a button for searching the movie
-search_button = st.button('Search')
-
-# Initialize a spinner
-with st.spinner('Searching for the movie...'):
-    # Search for the movie on IMDb
-    try:
-        search_results = ia.search_movie(user_movie)
-        movie_id = search_results[0].getID()
-        movie = ia.get_movie(movie_id)
-    except:
-        st.write('Movie not found. Please try again.')
-        movie_id = None
-
-# If movie is found, display the details and recommend similar movies
-if movie_id is not None:
-    # Get the movie details and ratings
-    title = movie.get('title')
-    year = movie.get('year')
-    genres = ','.join(movie.get('genres'))
-    rating = movie.get('rating')
+# Define the recommendation function
+def recommend_movies(title):
+    # Search for the movie
+    search_result = imdb_object.search_movie(title)
     
-    # Create a dataframe with the movie data
-    movie_df = pd.DataFrame({'movieId': [movie_id], 'title': [title], 'year': [year], 'genres': [genres], 'rating': [rating]})
+    # Get the ID of the first search result
+    movie_id = search_result[0].getID()
     
-    # Save the movie dataframe to CSV
-    movie_df.to_csv('movies.csv', index=False)
+    # Get the movie object using the ID
+    movie = imdb_object.get_movie(movie_id)
     
-    # Get the movie ratings
-    ratings = movie.get('votes')
+    # Get the keywords associated with the movie
+    keywords = movie.get('keywords')
     
-    # Create a dataframe with the movie ratings
-    ratings_df = pd.DataFrame({'movieId': [movie_id], 'userId': ['imdb'], 'rating': [ratings], 'timestamp': [None]})
-    
-    # Save the ratings dataframe to CSV
-    ratings_df.to_csv('ratings.csv', index=False)
-    
-    # Load the dataset
-    movies = pd.read_csv('movies.csv')
-    ratings = pd.read_csv('ratings.csv')
-    
-    # Merge the movies and ratings dataframes
-    df = pd.merge(movies, ratings, on='movieId')
-    df = df.drop(['timestamp'], axis=1)
-    
-    # Pivot the data to create a user-item matrix
-    matrix = df.pivot_table(index='userId', columns='title', values='rating')
-    matrix = matrix.fillna(0)
-    
-    # Convert the user-item matrix to a sparse matrix
-    sparse_matrix = csr_matrix(matrix)
-    
-    # Train the nearest neighbors algorithm on the sparse matrix
-    model = NearestNeighbors(metric='cosine', algorithm='brute')
-    model.fit(sparse_matrix)
-    
-    # Recommend similar movies
-    distances, indices = model.kneighbors(sparse_matrix[movies[movies['title'] == title].index[0]], n_neighbors=11)
+    # Get the recommended movies based on the keywords
     recommended_movies = []
-    for i in range(1, len(distances.flatten())):
-        recommended_movies.append(movies['title'][indices.flatten()[i]])
+    if keywords is not None:
+        for keyword in keywords:
+            keyword_movies = imdb_object.get_keyword(keyword)
+            keyword_movies = [m for m in keyword_movies if m.getID() != movie_id]
+            recommended_movies.extend(keyword_movies)
+        
+        # Filter the recommended movies to only include those with ratings near the top 250
+        recommended_movies = sorted(recommended_movies, key=lambda x: x.get('rating'), reverse=True)
+        top_250_rating = sorted([x.get('rating') for x in imdb_object.get_top250_movies()], reverse=True)[249]
+        recommended_movies = [x for x in recommended_movies if abs(x.get('rating') - top_250_rating) < 1]
+        
+        # Limit the recommended movies to 10
+        recommended_movies = recommended_movies[:10]
     
-    # Display recommended movies
-    st.write('Recommended movies:')
-    for movie in recommended_movies:
-        st.write('- ' + movie)
+    # Display the recommended movies
+    if recommended_movies:
+        st.write('Top 10 recommended movies:')
+        for i, movie in enumerate(recommended_movies):
+            st.write(f"{i+1}. {movie.get('title')} ({movie.get('year')}) - Rating: {movie.get('rating')}")
+    else:
+        st.write('No recommendations found for this movie')
+
+# Create the Streamlit app
+st.title('Movie Recommendation App')
+title = st.text_input('Enter a movie title')
+if title:
+    recommend_movies(title)
