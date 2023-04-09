@@ -1,3 +1,3 @@
-# streamlit_new
-This is a Python code for a movie recommendation system that recommends similar movies based on a user's input of their favorite movie. The code uses IMDbPY library to search for the movie entered by the user and retrieves its details and ratings. It then saves the movie data and ratings to CSV files, loads the dataset, and creates a user-item matrix by pivoting the data. The user-item matrix is converted to a sparse matrix and trained using the nearest neighbors algorithm. Finally, the code recommends similar movies based on the trained model and displays them using Streamlit.
+# movie details 
+This app is a movie details search engine built using Python and Streamlit. It allows users to enter a movie title and retrieve information such as the movie's rating, year, plot, top 10 cast members, and top 5 recommendations. The app uses the IMDb module to search for and retrieve movie details, and it displays the results in a visually appealing format using Streamlit's built-in layout functions and custom CSS styling.
 the link for this app to host or use is "https://shib1111111-streamlit-new-app-6tzrnc.streamlit.app/"
