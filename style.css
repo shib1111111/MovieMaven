@@ -1,0 +1,32 @@
+/* Style the buttons */
+button {
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 3px #999;
+    color: #333;
+    font-size: 18px;
+    height: 50px;
+    margin: 5px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+
+/* Style the output area */
+.output {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 3px #999;
+    color: #333;
+    font-size: 24px;
+    height: 50px;
+    margin: 10px 0;
+    padding: 10px;
+    text-align: right;
+    width: 100%;
+}
