@@ -109,15 +109,14 @@ if st.button("Search"):
 
                 # Display the formatted cast list
                 st.code(formatted_cast)
-
-
                 # Display the writers
                 writers = movie.get('writers')
                 if writers:
-                    writers_str = [writer for writer in writers if writer is not None]
+                    writers_str = [writer["name"] for writer in writers if isinstance(writer, dict)]
                     st.write("**Writers:**", ", ".join(writers_str))
                 else:
-                    st.write("**Writers:** N/A")
+                     st.write("**Writers:** N/A")
+
 
                 # Display the production companies
                 production_companies = movie.get('production companies')
