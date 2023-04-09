@@ -9,7 +9,8 @@ st.set_page_config(
 )
 
 # Define the theme colors
-if st.get_option("theme.dark"):
+theme_config = st.get_theme_config()
+if theme_config["theme"] == "dark":
     primary_color = "#64C7FF"
     background_color = "#1F222D"
     font_color = "white"
@@ -68,7 +69,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
 # Display the app title and input field
 st.title('Movie Details')
 st.write('Enter a movie title (e.g. "The Godfather")')
