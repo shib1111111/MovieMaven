@@ -102,11 +102,15 @@ if st.button("Search"):
                     st.write(member)
 
                 # Display the writers
-                writers = movie.get('writers')
-                if writers:
-                    st.write("**Writers:**", ", ".join(writers))
+                # Extract the names of the writers from the Person objects
+                writer_names = [writer["name"] for writer in movie.get("writers", [])]
+
+                # Display the writers
+                if writer_names:
+                    st.write("**Writers:**", ", ".join(writer_names))
                 else:
                     st.write("**Writers:** N/A")
+
 
                 # Display the production companies
                 production_companies = movie.get('production companies')
