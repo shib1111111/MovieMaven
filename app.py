@@ -30,8 +30,6 @@ def square_root(num):
 # Define calculator layout
 st.set_page_config(page_title="Calculator", page_icon=":iphone:", layout="wide")
 st.title("Calculator")
-
-# Import CSS
 st.markdown('<link rel="stylesheet" type="text/css" href="style.css">', unsafe_allow_html=True)
 
 button_labels = [
@@ -39,7 +37,7 @@ button_labels = [
     ["7", "8", "9", "×"],
     ["4", "5", "6", "-"],
     ["1", "2", "3", "+"],
-    ["±", "0", ".", "=", "%", "^", "√"]
+    ["±", "0", ".", "=", "%", "^", "sqrt"]
 ]
 
 # Define button mapping
@@ -48,12 +46,12 @@ button_map = {
     "÷": "/",
     "×": "*",
     "^": "**",
-    "√": "square_root",
+    "sqrt": "square_root",
     "=": "calculate"
 }
 
 # Generate calculator buttons
-col_width = st.sidebar.get_column_width() // len(button_labels[0])
+col_width = st.sidebar.width / len(button_labels[0])
 for row in button_labels:
     button_row = st.empty()
     for label in row:
