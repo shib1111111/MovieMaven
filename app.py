@@ -5,7 +5,7 @@ from imdb import IMDb
 ia = IMDb()
 
 # Set up the Streamlit app
-st.title('IMDb Movie Details')
+st.title('Movie Details')
 st.write('Enter a movie title (e.g. "The Godfather")')
 movie_title = st.text_input('', '')
 
