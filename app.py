@@ -8,8 +8,9 @@ imdb_object = imdb.IMDb()
 def recommend_movies(title):
     # Search for the movie
     search_result = imdb_object.search_movie(title)
-    
-    # Get the ID of the first search result
+    if len(search_result) == 0:
+        st.write("No results found. Please try again.")
+        return
     movie_id = search_result[0].getID()
     
     # Get the movie object using the ID
@@ -41,9 +42,9 @@ def recommend_movies(title):
             st.write(f"{i+1}. {movie.get('title')} ({movie.get('year')}) - Rating: {movie.get('rating')}")
     else:
         st.write('No recommendations found for this movie')
-        st.write('Displaying top 10 movies of all time:')
-        top_movies = imdb_object.get_top250_movies()
-        for i, movie in enumerate(top_movies[:10]):
+        st.write('Here are the top 10 movies of all time:')
+        top_250_movies = imdb_object.get_top250_movies()[:10]
+        for i, movie in enumerate(top_250_movies):
             st.write(f"{i+1}. {movie.get('title')} ({movie.get('year')}) - Rating: {movie.get('rating')}")
 
 # Create the Streamlit app
