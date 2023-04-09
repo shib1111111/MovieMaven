@@ -132,7 +132,7 @@ def display_signature():
         """
         , unsafe_allow_html=True
     )
-    st.sidebar.markdown(
+    st.markdown(
         """
         <div class="signature">
         Made with ❤️ by Shib Kumar Saraf
