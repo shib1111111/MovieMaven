@@ -93,10 +93,20 @@ if st.button("Search"):
                     st.write("**Directors:** N/A")
 
                 # Display the top 10 cast members
+
                 st.write("**Top 10 Cast Members:**")
                 cast = movie["cast"][:10]
+
+                # Create a formatted string with the name and character played for each cast member
+                formatted_cast = ""
                 for member in cast:
-                    st.write(member.get('name'))
+                    name = member.get('name')
+                    character = member.get('character')
+                    formatted_cast += f"{name} as {character}\n"
+
+                # Display the formatted cast list
+                st.code(formatted_cast)
+
 
                 # Display the writers
                 writers = movie.get('writers')
