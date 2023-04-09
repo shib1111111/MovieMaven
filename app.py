@@ -55,7 +55,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Display the app title and input field
+
+# Define app title and input field
 st.title("MovieMaven")
 st.write('Enter a movie title (e.g. "The Godfather")')
 movie_title = st.text_input("", "")
@@ -63,6 +64,7 @@ movie_title = st.text_input("", "")
 # Handle the search button click
 if st.button("Search"):
     with st.spinner("Searching for movie..."):
+        # Initialize the IMDb module
         ia = IMDb()
 
         # Search for the movie by title
@@ -82,18 +84,67 @@ if st.button("Search"):
                 )
                 st.write("**Rating:**", movie["rating"])
                 st.write("**Genres:**", ", ".join(movie["genres"]))
-                if "plot" in movie:
-                    st.write("**Plot:**", movie["plot"][0])
-                else:
-                    st.write("**Plot:** N/A")
 
-                # Display the top 10 cast members
+                # Display the movie's directors
+                directors = ia.get_directors(movie)
+                if directors:
+                    st.write("**Directors:**")
+                    for director in directors:
+                        st.write(f"{director['name']} ({director.get('birth date')})")
+                        st.image(director.get('headshot'))
+                else:
+                    st.write("**Directors:** N/A")
+
+                # Display the movie's writers
+                writers = ia.get_writers(movie)
+                if writers:
+                    st.write("**Writers:**")
+                    for writer in writers:
+                        st.write(f"{writer['name']} ({writer.get('birth date')})")
+                        st.image(writer.get('headshot'))
+                else:
+                    st.write("**Writers:** N/A")
+
+                st.write("**Box Office Gross:**", movie.get('box office'))
+
+                st.write("**Runtime:**", movie.get('runtimes'))
+
+                st.write("**Release Date(s):**")
+                for release in movie.get('release dates'):
+                    st.write(f"{release['country']} ({release['date']})")
+
+                st.write("**Languages:**")
+                for lang in movie.get('languages'):
+                    st.write(lang)
+
+                st.write("**Awards:**")
+                awards = ia.get_movie_awards(movie.getID())
+                if awards:
+                    for award_type in awards:
+                        st.write(f"{award_type}: {awards[award_type]}")
+                else:
+                    st.write("N/A")
+
                 st.write("**Top 10 Cast Members:**")
                 cast = movie["cast"][:10]
                 for member in cast:
-                    st.write(member)
+                    st.write(f"{member['name']} as {member.currentRole}")
 
-                # Display recommendations, if available
+                st.write("**Plot:**")
+                if "plot outline" in movie:
+                    st.write(movie["plot outline"])
+                elif "plot" in movie:
+                    st.write(movie["plot"][0])
+                else:
+                    st.write("N/A")
+
+                st.write("**Soundtrack:**")
+                soundtrack = ia.get_movie_soundtrack(movie.getID())
+                if soundtrack:
+                    for track in soundtrack.get('data'):
+                        st.write(f"{track.get('title')} by {track.get('performers')}")
+                else:
+                    st.write("N/A")
                 if "recommendations" in movie:
                     st.write("**Top 5 Recommendations:**")
                     for i, recommendation in enumerate(movie["recommendations"][:5]):
