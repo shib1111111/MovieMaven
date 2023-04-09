@@ -1,77 +1,76 @@
+import pandas as pd
+import numpy as np
+from scipy.sparse import csr_matrix
+from sklearn.neighbors import NearestNeighbors
 import streamlit as st
-import math
+from imdb import IMDb
 
-# Define calculator operations
-def add(num1, num2):
-    return num1 + num2
+# Initialize IMDbPY library
+ia = IMDb()
 
-def subtract(num1, num2):
-    return num1 - num2
+# Create a Streamlit app
+st.title('Movie Recommender System')
 
-def multiply(num1, num2):
-    return num1 * num2
+# Ask user for their favorite movie
+user_movie = st.text_input('Enter your favorite movie:')
 
-def divide(num1, num2):
-    if num2 == 0:
-        raise ZeroDivisionError("Cannot divide by zero!")
-    return num1 / num2
+# Search for the movie on IMDb
+try:
+    search_results = ia.search_movie(user_movie)
+    movie_id = search_results[0].getID()
+    movie = ia.get_movie(movie_id)
+except:
+    st.write('Movie not found. Please try again.')
+    movie_id = None
 
-def percentage(num1, num2):
-    return num1 * (num2 / 100)
-
-def exponent(num1, num2):
-    return num1 ** num2
-
-def square_root(num):
-    if num < 0:
-        raise ValueError("Cannot compute square root of a negative number!")
-    return math.sqrt(num)
-
-# Define calculator layout
-st.set_page_config(page_title="Calculator", page_icon=":iphone:", layout="wide")
-st.title("Calculator")
-
-button_labels = [
-    ["(", ")", "C", "÷"],
-    ["7", "8", "9", "×"],
-    ["4", "5", "6", "-"],
-    ["1", "2", "3", "+"],
-    ["±", "0", ".", "=", "%", "^", "sqrt"]
-]
-
-# Define button mapping
-button_map = {
-    "C": "clear",
-    "÷": "/",
-    "×": "*",
-    "^": "**",
-    "sqrt": "square_root",
-    "=": "calculate"
-}
-
-# Generate calculator buttons
-col_width = st.sidebar.get_column_width() // len(button_labels[0])
-for row in button_labels:
-    button_row = st.empty()
-    for label in row:
-        operation = button_map.get(label, label)
-        if operation == "calculate":
-            button = button_row.button(label, key=operation, width=col_width*2)
-        elif operation == "clear":
-            button = button_row.button(label, key=operation, width=col_width)
-        else:
-            button = button_row.button(label, key=operation, width=col_width)
-        st.markdown(f'<style>div.stButton > button[key="{operation}"] {{background-color: #f0f0f0; color: #333333;}}</style>', unsafe_allow_html=True)
-
-# Define input field for calculator
-input_field = st.text_input("Enter calculation", key="input")
-
-# Handle user input and display result
-if button and operation == "clear":
-    input_field.value = ""
-elif button and operation == "calculate":
-    try:
-        result = eval(input_field.value)
-        input_field.value = str(result)
-    except (SyntaxError, ValueError, ZeroDivisionError) as e:
-        input_field.value = str(e)
+if movie_id is not None:
+    # Get the movie details and ratings
+    title = movie.get('title')
+    year = movie.get('year')
+    genres = ','.join(movie.get('genres'))
+    rating = movie.get('rating')
+    
+    # Create a dataframe with the movie data
+    movie_df = pd.DataFrame({'movieId': [movie_id], 'title': [title], 'year': [year], 'genres': [genres], 'rating': [rating]})
+    
+    # Save the movie dataframe to CSV
+    movie_df.to_csv('movies.csv', index=False)
+    
+    # Get the movie ratings
+    ratings = movie.get('votes')
+    
+    # Create a dataframe with the movie ratings
+    ratings_df = pd.DataFrame({'movieId': [movie_id], 'userId': ['imdb'], 'rating': [ratings], 'timestamp': [None]})
+    
+    # Save the ratings dataframe to CSV
+    ratings_df.to_csv('ratings.csv', index=False)
+    
+    # Load the dataset
+    movies = pd.read_csv('movies.csv')
+    ratings = pd.read_csv('ratings.csv')
+    
+    # Merge the movies and ratings dataframes
+    df = pd.merge(movies, ratings, on='movieId')
+    df = df.drop(['timestamp'], axis=1)
+    
+    # Pivot the data to create a user-item matrix
+    matrix = df.pivot_table(index='userId', columns='title', values='rating')
+    matrix = matrix.fillna(0)
+    
+    # Convert the user-item matrix to a sparse matrix
+    sparse_matrix = csr_matrix(matrix)
+    
+    # Train the nearest neighbors algorithm on the sparse matrix
+    model = NearestNeighbors(metric='cosine', algorithm='brute')
+    model.fit(sparse_matrix)
+    
+    # Recommend similar movies
+    distances, indices = model.kneighbors(sparse_matrix[movies[movies['title'] == title].index[0]], n_neighbors=11)
+    recommended_movies = []
+    for i in range(1, len(distances.flatten())):
+        recommended_movies.append(movies['title'][indices.flatten()[i]])
+    
+    # Display recommended movies
+    st.write('Recommended movies:')
+    for movie in recommended_movies:
+        st.write('- ' + movie)
