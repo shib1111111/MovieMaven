@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # Define the theme colors
-theme_config = st.get_theme_config()
+theme_config = st.get_option("theme")
 if theme_config["theme"] == "dark":
     primary_color = "#64C7FF"
     background_color = "#1F222D"
