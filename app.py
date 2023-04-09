@@ -5,7 +5,7 @@ from imdb import IMDb
 ia = IMDb()
 
 # Set up the Streamlit app
-st.set_page_config(page_title='IMDb Movie Details', page_icon=':clapper:', layout='wide')
+st.set_page_config(page_title="IMDb Movie Details", page_icon=":movie_camera:", layout="wide")
 st.title('IMDb Movie Details')
 st.write('Enter a movie title (e.g. "The Godfather")')
 movie_title = st.text_input('', '')
@@ -13,38 +13,29 @@ movie_title = st.text_input('', '')
 # Handle the search button click
 if st.button('Search'):
     # Search for the movie by title
-    movies = ia.search_movie(movie_title)
-
-    # Display search results
-    if not movies:
-        st.write('No results found.')
+    movie_results = ia.search_movie(movie_title)
+    if len(movie_results) == 0:
+        st.write("No movies found with that title.")
     else:
-        st.write(f'Search results for "{movie_title}":')
-        for i, movie in enumerate(movies[:10]):
-            st.write(f'{i+1}. {movie["title"]} ({movie["year"]})')
-        
-        # Prompt user to select a movie
-        movie_index = st.selectbox('Select a movie:', [str(i+1) for i in range(min(10, len(movies)))])
-        movie = movies[int(movie_index)-1]
+        movie = ia.get_movie(movie_results[0].getID())
         ia.update(movie)
 
         # Display the movie details
-        st.write('---')
-        st.write(f'**Title:** {movie["title"]}')
-        st.write(f'**Year:** {movie["year"]}')
-        st.write(f'**Genres:** {", ".join(movie["genres"])}')
-        st.write(f'**Rating:** {movie.get("rating", "N/A")}')
+        st.write('**Title:**', movie['title'])
+        st.write('**Year:**', movie['year'])
+        st.write('**Rating:**', movie['rating'])
+        st.write('**Genres:**', ', '.join(movie['genres']))
         if 'plot' in movie:
-            st.write(f'**Plot:** {movie["plot"][0]}')
+            st.write('**Plot:**', movie['plot'][0])
         else:
             st.write('**Plot:** N/A')
-        st.write('---')
-        
-        # Get recommended movies
-        recommendations = ia.get_movie_recommendations(movie.getID())
-        if not recommendations:
-            st.write('No recommendations found.')
-        else:
-            st.write('Recommended movies:')
-            for i, rec in enumerate(recommendations[:10]):
-                st.write(f'{i+1}. {rec["title"]} ({rec["year"]})')
+
+        # Display the top 10 cast members
+        st.write('**Top 10 Cast Members:**')
+        for i, person in enumerate(movie['cast'][:10]):
+            st.write(f'{i+1}. {person}')
+
+        # Display the top 5 recommendations
+        st.write('**Top 5 Recommendations:**')
+        for i, recommendation in enumerate(movie['recommendations'][:5]):
+            st.write(f'{i+1}. {recommendation["title"]} ({recommendation["year"]})')
