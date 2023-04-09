@@ -79,7 +79,10 @@ if st.button("Search"):
                 st.image(movie["full-size cover url"], use_column_width=True)
 
             with col2:
-                st.markdown(f"<h2 class='Movie Details'>{movie['title']} ({movie['year']})</h2>", unsafe_allow_html=True)
+                st.markdown(
+                    f"<h2 class='Movie Details'>{movie['title']} ({movie['year']})</h2>",
+                    unsafe_allow_html=True,
+                )
                 st.write("**Rating:**", movie["rating"])
                 st.write("**Genres:**", ", ".join(movie["genres"]))
 
@@ -90,7 +93,7 @@ if st.button("Search"):
                     st.write("**Plot:** N/A")
 
                 # Display the directors
-                directors = movie.get('directors')
+                directors = movie.get("directors")
                 if directors:
                     st.write("**Directors:**", ", ".join(directors))
                 else:
@@ -103,49 +106,51 @@ if st.button("Search"):
                     st.write(member)
 
                 # Display the writers
-                writers = movie.get('writers')
+                writers = movie.get("writers")
                 if writers:
                     st.write("**Writers:**", ", ".join(writers))
                 else:
                     st.write("**Writers:** N/A")
 
                 # Display the production companies
-                production_companies = movie.get('production companies')
+                production_companies = movie.get("production companies")
                 if production_companies:
-                    st.write("**Production Companies:**", ", ".join(production_companies))
+                    st.write(
+                        "**Production Companies:**", ", ".join(production_companies)
+                    )
                 else:
                     st.write("**Production Companies:** N/A")
 
                 # Display the box office gross (if available)
-                box_office = movie.get('box office', {}).get('gross')
+                box_office = movie.get("box office", {}).get("gross")
                 if box_office:
                     st.write("**Box Office Gross:**", box_office)
                 else:
                     st.write("**Box Office Gross:** N/A")
 
                 # Display the budget (if available)
-                budget = movie.get('box office', {}).get('budget')
+                budget = movie.get("box office", {}).get("budget")
                 if budget:
                     st.write("**Budget:**", budget)
                 else:
                     st.write("**Budget:** N/A")
 
                 # Display the production year
-                production_year = movie.get('year')
+                production_year = movie.get("year")
                 if production_year:
                     st.write("**Production Year:**", production_year)
                 else:
                     st.write("**Production Year:** N/A")
 
                 # Display the runtime
-                runtime = movie.get('runtimes')
+                runtime = movie.get("runtimes")
                 if runtime:
                     st.write("**Runtime:**", runtime[0])
                 else:
                     st.write("**Runtime:** N/A")
 
                 # Display the MPAA rating
-                mpaa_rating = movie.get('certificates', {}).get('United States')
+                mpaa_rating = movie.get("certificates", {}).get("United States")
                 if mpaa_rating:
                     st.write("**MPAA Rating:**", mpaa_rating)
                 else:
@@ -154,11 +159,13 @@ if st.button("Search"):
                 if "recommendations" in movie:
                     st.write("**Top 5 Recommendations:**")
                     for i, recommendation in enumerate(movie["recommendations"][:5]):
-                            st.write(f'{i+1}. {recommendation["title"]} ({recommendation["year"]})')
+                        st.write(
+                            f'{i+1}. {recommendation["title"]} ({recommendation["year"]})'
+                        )
                 else:
                     st.write("  ")
- else:
-      st.write(f"No movie found with the title '{movie_title}'")
+        else:
+            st.write(f"No movie found with the title '{movie_title}'")
 
 # Define a function to display the signature
 def display_signature():
