@@ -88,8 +88,10 @@ if st.button("Search"):
 
                 # Display the directors
                 directors = movie.get('directors')
+                # Extract the director names as strings
+                director_names = [director['name'] for director in directors]
                 if directors:
-                    st.write("**Directors:**", ", ".join(directors))
+                    st.write("**Directors:**", ", ".join(director_names))
                 else:
                     st.write("**Directors:** N/A")
 
