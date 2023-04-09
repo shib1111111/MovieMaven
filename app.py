@@ -20,4 +20,7 @@ if st.button('Search'):
     st.write('**Year:**', movie['year'])
     st.write('**Rating:**', movie['rating'])
     st.write('**Genres:**', ', '.join(movie['genres']))
-    st.write('**Plot:**', movie['plot'][0])
+    if 'plot' in movie:
+        st.write('**Plot:**', movie['plot'][0])
+    else:
+        st.write('**Plot:** N/A')
