@@ -55,8 +55,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
-# Define app title and input field
 st.title("MovieMaven")
 st.write('Enter a movie title (e.g. "The Godfather")')
 movie_title = st.text_input("", "")
@@ -78,7 +76,7 @@ if st.button("Search"):
             with col1:
                 st.image(movie["full-size cover url"], use_column_width=True)
             with col2:
-                st.markdown(f"<h2 class='Movie Details'>{movie['title']} ({movie['year']})</h2>", unsafe_allow_html=True)
+                st.markdown(f"<h2 class='Movie Details'>{movie['title']} ({movie['year']})</h2>",unsafe_allow_html=True)
                 st.write("**Rating:**", movie["rating"])
                 st.write("**Genres:**", ", ".join(movie["genres"]))
                 if "plot" in movie:
@@ -88,10 +86,9 @@ if st.button("Search"):
 
                 # Display the directors
                 directors = movie.get('directors')
-                # Extract the director names as strings
-                director_names = [director['name'] for director in directors]
                 if directors:
-                    st.write("**Directors:**", ", ".join(director_names))
+                    directors_str = [director.get('name') for director in directors]
+                    st.write("**Directors:**", ", ".join(directors_str))
                 else:
                     st.write("**Directors:** N/A")
 
@@ -99,23 +96,21 @@ if st.button("Search"):
                 st.write("**Top 10 Cast Members:**")
                 cast = movie["cast"][:10]
                 for member in cast:
-                    st.write(member)
+                    st.write(member.get('name'))
 
                 # Display the writers
-                # Extract the names of the writers from the Person objects
-                writer_names = [writer["name"] for writer in movie.get("writers", [])]
-
-                # Display the writers
-                if writer_names:
-                    st.write("**Writers:**", ", ".join(writer_names))
+                writers = movie.get('writers')
+                if writers:
+                    writers_str = [writer.get('name') for writer in writers]
+                    st.write("**Writers:**", ", ".join(writers_str))
                 else:
                     st.write("**Writers:** N/A")
-
 
                 # Display the production companies
                 production_companies = movie.get('production companies')
                 if production_companies:
-                    st.write("**Production Companies:**", ", ".join(production_companies))
+                    production_companies_str = [company.get('name') for company in production_companies]
+                    st.write("**Production Companies:**", ", ".join(production_companies_str))
                 else:
                     st.write("**Production Companies:** N/A")
 
