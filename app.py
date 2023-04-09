@@ -1,23 +1,31 @@
 import streamlit as st
 import math
 
+# Setting up the calculator layout
 st.set_page_config(page_title="Calculator", page_icon=":iphone:", layout="wide")
-
 st.title("Calculator")
 
-col1, col2 = st.columns(2)
+col1, col2, col3, col4 = st.beta_columns(4)
+
 with col1:
-    num1 = st.number_input("Enter the first number", value=0.0, step=0.1)
+    num1 = st.number_input("Enter the first number", value=0.0, step=0.01)
+
 with col2:
-    num2 = st.number_input("Enter the second number", value=0.0, step=0.1)
+    num2 = st.number_input("Enter the second number", value=0.0, step=0.01)
 
-row1 = st.row_container()
-add_btn, sub_btn, mul_btn, div_btn, pow_btn = row1.button_group(["+", "-", "×", "÷", "xⁿ"])
-row2 = st.row_container()
-sin_btn, cos_btn, tan_btn, exp_btn, log_btn = row2.button_group(["sin", "cos", "tan", "eˣ", "log"])
+# Adding buttons for various operations
+add_btn = st.button("+")
+sub_btn = st.button("-")
+mul_btn = st.button("*")
+div_btn = st.button("/")
+mod_btn = st.button("%")
+pow_btn = st.button("^")
+sqrt_btn = st.button("√")
+sin_btn = st.button("sin")
+cos_btn = st.button("cos")
+tan_btn = st.button("tan")
 
-result = None
-
+# Performing the selected operation
 if sin_btn:
     result = math.sin(num1)
     st.success(f"sin({num1}) = {result:.2f}")
@@ -27,31 +35,42 @@ elif cos_btn:
 elif tan_btn:
     result = math.tan(num1)
     st.success(f"tan({num1}) = {result:.2f}")
-elif exp_btn:
-    result = math.exp(num1)
-    st.success(f"e^{num1} = {result:.2f}")
-elif log_btn:
-    result = math.log(num1)
-    st.success(f"log({num1}) = {result:.2f}")
-elif add_btn:
-    result = num1 + num2
-    st.success(f"{num1} + {num2} = {result:.2f}")
-elif sub_btn:
-    result = num1 - num2
-    st.success(f"{num1} - {num2} = {result:.2f}")
-elif mul_btn:
-    result = num1 * num2
-    st.success(f"{num1} × {num2} = {result:.2f}")
-elif div_btn:
-    if num2 != 0:
-        result = num1 / num2
-        st.success(f"{num1} ÷ {num2} = {result:.2f}")
+elif sqrt_btn:
+    result = math.sqrt(num1)
+    st.success(f"√({num1}) = {result:.2f}")
+else:
+    if add_btn:
+        result = num1 + num2
+        st.success(f"{num1} + {num2} = {result:.2f}")
+    elif sub_btn:
+        result = num1 - num2
+        st.success(f"{num1} - {num2} = {result:.2f}")
+    elif mul_btn:
+        result = num1 * num2
+        st.success(f"{num1} * {num2} = {result:.2f}")
+    elif div_btn:
+        if num2 != 0:
+            result = num1 / num2
+            st.success(f"{num1} / {num2} = {result:.2f}")
+        else:
+            st.warning("Division by zero error. Please enter a non-zero number as divisor.")
+            result = "Not defined"
+    elif mod_btn:
+        result = num1 % num2
+        st.success(f"{num1} % {num2} = {result:.2f}")
+    elif pow_btn:
+        result = num1 ** num2
+        st.success(f"{num1} ^ {num2} = {result:.2f}")
     else:
-        st.warning("Division by 0 error. Please enter a non-zero number as divisor.")
-        result = "Not defined"
-elif pow_btn:
-    result = num1 ** num2
-    st.success(f"{num1}^{num2} = {result:.2f}")
+        result = None
 
+# Handling cases where the result is not defined
 if result is None:
-    st.info("Please select an operation.")
+    st.info("Perform an operation to see the result.")
+
+# Adding a clear button to reset the calculator
+if st.button("Clear"):
+    st.experimental_rerun()
+
+st.write("---")
+st.write("Created by Shib Kumar Saraf")
