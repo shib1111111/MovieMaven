@@ -1,82 +1,71 @@
 import streamlit as st
 
-# Add Bootstrap CSS
-st.markdown("""
+# Set up the Streamlit app
+st.set_page_config(page_title="Movie Details", page_icon=":movie_camera:", layout="wide")
+
+# Add custom CSS
+st.markdown(
+    """
     <style>
-        /* Set the background color */
         body {
-            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background-color: #f4f4f4;
         }
-
-        /* Style the title */
-        .title {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 30px;
+        .stButton button, .stTextInput input {
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+            color: #fff !important;
         }
-
-        /* Style the search box */
-        .search-box {
-            margin-bottom: 30px;
-        }
-
-        /* Style the search button */
-        .search-btn {
-            background-color: #007bff;
-            color: #fff;
-            font-weight: bold;
-            border-radius: 5px;
-            padding: 10px 20px;
-            border: none;
-        }
-
-        /* Style the movie details */
-        .movie-details {
-            margin-top: 30px;
-        }
-
-        /* Style the recommendations */
-        .recommendations {
-            margin-top: 30px;
-        }
-
-        /* Style the cast list */
-        .cast-list {
-            margin-top: 30px;
+        .stButton:hover button, .stTextInput:hover input {
+            background-color: #0069d9 !important;
+            border-color: #0062cc !important;
+            color: #fff !important;
         }
     </style>
-""", unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
-# Set up the Streamlit app
+# Display the app title and input field
 st.title('Movie Details')
-st.markdown('<div class="title">Movie Details</div>', unsafe_allow_html=True)
-
-# Add a search box
-movie_title = st.text_input('Enter a movie title (e.g. "The Godfather")', '')
-st.markdown('<div class="search-box"><input type="text" value="' + movie_title + '"></div>', unsafe_allow_html=True)
+st.write('Enter a movie title (e.g. "The Godfather")')
+movie_title = st.text_input('', '')
 
 # Handle the search button click
-if st.button('Search', class_='search-btn'):
-    # Search for the movie by title
-    movie = ia.search_movie(movie_title)[0]
-    ia.update(movie)
+if st.button('Search'):
+    with st.spinner('Searching for movie...'):
+        # Initialize the IMDb module
+        from imdb import IMDb
+        ia = IMDb()
 
-    # Display the movie details
-    st.markdown('<div class="movie-details"><strong>Title:</strong> ' + movie['title'] + '<br>' +
-                '<strong>Year:</strong> ' + str(movie['year']) + '<br>' +
-                '<strong>Rating:</strong> ' + str(movie['rating']) + '<br>' +
-                '<strong>Genres:</strong> ' + ', '.join(movie['genres']) + '<br>' +
-                '<strong>Plot:</strong> ' + (movie['plot'][0] if 'plot' in movie else 'N/A') + '</div>', unsafe_allow_html=True)
+        # Search for the movie by title
+        movie = ia.search_movie(movie_title)[0]
+        ia.update(movie)
 
-    # Display the top 10 cast members
-    cast = movie['cast'][:10]
-    st.markdown('<div class="cast-list"><strong>Top 10 Cast Members:</strong><br>' +
-                '<ul>' + ''.join([f'<li>{member}</li>' for member in cast]) + '</ul></div>', unsafe_allow_html=True)
+        # Display the movie details
+        col1, col2 = st.columns(2)
+        col1.image(movie['full-size cover url'], use_column_width=True)
+        with col2:
+            st.write('**Title:**', movie['title'])
+            st.write('**Year:**', movie['year'])
+            st.write('**Rating:**', movie['rating'])
+            st.write('**Genres:**', ', '.join(movie['genres']))
+            if 'plot' in movie:
+                st.write('**Plot:**', movie['plot'][0])
+            else:
+                st.write('**Plot:** N/A')
 
-    # Display recommendations, if available
-    if 'recommendations' in movie:
-        st.markdown('<div class="recommendations"><strong>Top 5 Recommendations:</strong><br>' +
-                    '<ol>' + ''.join([f'<li>{recommendation["title"]} ({recommendation["year"]})</li>'
-                                      for recommendation in movie['recommendations'][:5]]) + '</ol></div>', unsafe_allow_html=True)
-    else:
-        st.markdown('<div class="recommendations"> </div>', unsafe_allow_html=True)
+        # Display the top 10 cast members
+        st.write('**Top 10 Cast Members:**')
+        cast = movie['cast'][:10]
+        for member in cast:
+            st.write(member)
+
+        # Display recommendations, if available
+        if 'recommendations' in movie:
+            st.write('**Top 5 Recommendations:**')
+            for i, recommendation in enumerate(movie['recommendations'][:5]):
+                st.write(f'{i+1}. {recommendation["title"]} ({recommendation["year"]})')
+        else:
+            st.write('  ')
