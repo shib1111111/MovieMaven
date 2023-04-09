@@ -9,16 +9,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Define the theme colors
-theme_config = st.get_option("theme")
-if theme_config["theme"] == "dark":
-    primary_color = "#64C7FF"
-    background_color = "#1F222D"
-    font_color = "white"
-else:
-    primary_color = "#4285F4"
-    background_color = "#F5F5F5"
-    font_color = "#333"
 
 # Add custom CSS
 st.markdown(
