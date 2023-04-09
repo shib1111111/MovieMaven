@@ -114,7 +114,7 @@ if st.button("Search"):
 
 # Define a function to display the signature
 def display_signature():
-    st.sidebar.markdown(
+    st.markdown(
         """
         <style>
         .signature {
