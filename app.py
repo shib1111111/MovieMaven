@@ -2,7 +2,7 @@ import streamlit as st
 from imdb import IMDb
 # Set up the Streamlit app
 st.set_page_config(
-    page_title="Movie Details",
+    page_title="MovieMaven",
     page_icon=":movie_camera:",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -77,84 +77,88 @@ if st.button("Search"):
             col1, col2 = st.columns([3, 5])
             with col1:
                 st.image(movie["full-size cover url"], use_column_width=True)
+
             with col2:
-                st.markdown(
-                    f"<h2 class='Movie Details'>{movie['title']} ({movie['year']})</h2>",
-                    unsafe_allow_html=True,
-                )
+                st.markdown(f"<h2 class='Movie Details'>{movie['title']} ({movie['year']})</h2>", unsafe_allow_html=True)
                 st.write("**Rating:**", movie["rating"])
                 st.write("**Genres:**", ", ".join(movie["genres"]))
 
-                # Display the movie's directors
-                directors = ia.get_directors(movie)
+                # Display the plot summary
+                if "plot" in movie:
+                    st.write("**Plot:**", movie["plot"][0])
+                else:
+                    st.write("**Plot:** N/A")
+
+                # Display the directors
+                directors = movie.get('directors')
                 if directors:
-                    st.write("**Directors:**")
-                    for director in directors:
-                        st.write(f"{director['name']} ({director.get('birth date')})")
-                        st.image(director.get('headshot'))
+                    st.write("**Directors:**", ", ".join(directors))
                 else:
                     st.write("**Directors:** N/A")
 
-                # Display the movie's writers
-                writers = ia.get_writers(movie)
-                if writers:
-                    st.write("**Writers:**")
-                    for writer in writers:
-                        st.write(f"{writer['name']} ({writer.get('birth date')})")
-                        st.image(writer.get('headshot'))
-                else:
-                    st.write("**Writers:** N/A")
-
-                st.write("**Box Office Gross:**", movie.get('box office'))
-
-                st.write("**Runtime:**", movie.get('runtimes'))
-
-                st.write("**Release Date(s):**")
-                for release in movie.get('release dates'):
-                    st.write(f"{release['country']} ({release['date']})")
-
-                st.write("**Languages:**")
-                for lang in movie.get('languages'):
-                    st.write(lang)
-
-                st.write("**Awards:**")
-                awards = ia.get_movie_awards(movie.getID())
-                if awards:
-                    for award_type in awards:
-                        st.write(f"{award_type}: {awards[award_type]}")
-                else:
-                    st.write("N/A")
-
+                # Display the top 10 cast members
                 st.write("**Top 10 Cast Members:**")
                 cast = movie["cast"][:10]
                 for member in cast:
-                    st.write(f"{member['name']} as {member.currentRole}")
+                    st.write(member)
 
-                st.write("**Plot:**")
-                if "plot outline" in movie:
-                    st.write(movie["plot outline"])
-                elif "plot" in movie:
-                    st.write(movie["plot"][0])
+                # Display the writers
+                writers = movie.get('writers')
+                if writers:
+                    st.write("**Writers:**", ", ".join(writers))
                 else:
-                    st.write("N/A")
+                    st.write("**Writers:** N/A")
 
-                st.write("**Soundtrack:**")
-                soundtrack = ia.get_movie_soundtrack(movie.getID())
-                if soundtrack:
-                    for track in soundtrack.get('data'):
-                        st.write(f"{track.get('title')} by {track.get('performers')}")
+                # Display the production companies
+                production_companies = movie.get('production companies')
+                if production_companies:
+                    st.write("**Production Companies:**", ", ".join(production_companies))
                 else:
-                    st.write("N/A")
+                    st.write("**Production Companies:** N/A")
+
+                # Display the box office gross (if available)
+                box_office = movie.get('box office', {}).get('gross')
+                if box_office:
+                    st.write("**Box Office Gross:**", box_office)
+                else:
+                    st.write("**Box Office Gross:** N/A")
+
+                # Display the budget (if available)
+                budget = movie.get('box office', {}).get('budget')
+                if budget:
+                    st.write("**Budget:**", budget)
+                else:
+                    st.write("**Budget:** N/A")
+
+                # Display the production year
+                production_year = movie.get('year')
+                if production_year:
+                    st.write("**Production Year:**", production_year)
+                else:
+                    st.write("**Production Year:** N/A")
+
+                # Display the runtime
+                runtime = movie.get('runtimes')
+                if runtime:
+                    st.write("**Runtime:**", runtime[0])
+                else:
+                    st.write("**Runtime:** N/A")
+
+                # Display the MPAA rating
+                mpaa_rating = movie.get('certificates', {}).get('United States')
+                if mpaa_rating:
+                    st.write("**MPAA Rating:**", mpaa_rating)
+                else:
+                    st.write("**MPAA Rating:** N/A")
+                # Display recommendations, if available
                 if "recommendations" in movie:
                     st.write("**Top 5 Recommendations:**")
                     for i, recommendation in enumerate(movie["recommendations"][:5]):
-                        st.write(
-                            f'{i+1}. {recommendation["title"]} ({recommendation["year"]})'
-                        )
+                            st.write(f'{i+1}. {recommendation["title"]} ({recommendation["year"]})')
                 else:
                     st.write("  ")
-        else:
-            st.write(f"No movie found with the title '{movie_title}'")
+ else:
+      st.write(f"No movie found with the title '{movie_title}'")
 
 # Define a function to display the signature
 def display_signature():
