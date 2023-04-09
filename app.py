@@ -102,7 +102,10 @@ if st.button("Search"):
                 for member in cast:
                     name = member.get('name')
                     character = member.get('character')
-                    formatted_cast += f"{name} as {character}\n"
+                    if character:
+                        formatted_cast += f"{name} as {character}\n"
+                    else:
+                        formatted_cast += f"{name}\n"
 
                 # Display the formatted cast list
                 st.code(formatted_cast)
