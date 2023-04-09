@@ -7,22 +7,27 @@ st.set_page_config(page_title="Movie Details", page_icon=":movie_camera:", layou
 st.markdown(
     """
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-            background-color: #f4f4f4;
-        }
-        .stButton button, .stTextInput input {
-            background-color: #007bff !important;
-            border-color: #007bff !important;
-            color: #fff !important;
-        }
-        .stButton:hover button, .stTextInput:hover input {
-            background-color: #0069d9 !important;
-            border-color: #0062cc !important;
-            color: #fff !important;
-        }
-    </style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        background-color: #f9f9f9; /* lighter background color */
+    }
+    .stTextInput input {
+        background-color: #f1f3f4 !important; /* Google search bar color */
+        border-color: #f1f3f4 !important;
+        color: #333 !important;
+    }
+    .stButton button {
+        background-color: #f1f3f4 !important; /* Google search bar color */
+        border-color: #f1f3f4 !important;
+        color: #333 !important;
+    }
+    .stButton:hover button, .stTextInput:hover input {
+        background-color: #ddd !important; /* hover color */
+        border-color: #ddd !important;
+        color: #333 !important;
+    }
+</style>
     """,
     unsafe_allow_html=True
 )
