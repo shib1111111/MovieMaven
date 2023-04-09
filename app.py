@@ -52,19 +52,20 @@ st.markdown(
         }}
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 # Display the app title and input field
-st.title('Movie Details')
+st.title("Movie Details")
 st.write('Enter a movie title (e.g. "The Godfather")')
-movie_title = st.text_input('', '')
+movie_title = st.text_input("", "")
 
 # Handle the search button click
-if st.button('Search'):
-    with st.spinner('Searching for movie...'):
+if st.button("Search"):
+    with st.spinner("Searching for movie..."):
         # Initialize the IMDb module
         from imdb import IMDb
+
         ia = IMDb()
 
         # Search for the movie by title
@@ -76,28 +77,33 @@ if st.button('Search'):
             # Display the movie details
             col1, col2 = st.columns([3, 5])
             with col1:
-                st.image(movie['full-size cover url'], use_column_width=True)
+                st.image(movie["full-size cover url"], use_column_width=True)
             with col2:
-                st.markdown(f"<h2 class='movie-details'>{movie['title']} ({movie['year']})</h2>", unsafe_allow_html=True)
-                st.write('**Rating:**', movie['rating'])
-                st.write('**Genres:**', ', '.join(movie['genres']))
-                if 'plot' in movie:
-                    st.write('**Plot:**', movie['plot'][0])
+                st.markdown(
+                    f"<h2 class='movie-details'>{movie['title']} ({movie['year']})</h2>",
+                    unsafe_allow_html=True,
+                )
+                st.write("**Rating:**", movie["rating"])
+                st.write("**Genres:**", ", ".join(movie["genres"]))
+                if "plot" in movie:
+                    st.write("**Plot:**", movie["plot"][0])
                 else:
-                    st.write('**Plot:** N/A')
+                    st.write("**Plot:** N/A")
 
                 # Display the top 10 cast members
-                st.write('**Top 10 Cast Members:**')
-                cast = movie['cast'][:10]
+                st.write("**Top 10 Cast Members:**")
+                cast = movie["cast"][:10]
                 for member in cast:
                     st.write(member)
 
                 # Display recommendations, if available
-                if 'recommendations' in movie:
-                    st.write('**Top 5 Recommendations:**')
-                    for i, recommendation in enumerate(movie['recommendations'][:5]):
-                        st.write(f'{i+1}. {recommendation["title"]} ({recommendation["year"]})')
+                if "recommendations" in movie:
+                    st.write("**Top 5 Recommendations:**")
+                    for i, recommendation in enumerate(movie["recommendations"][:5]):
+                        st.write(
+                            f'{i+1}. {recommendation["title"]} ({recommendation["year"]})'
+                        )
                 else:
-                    st.write('  ')
+                    st.write("  ")
         else:
             st.write(f"No movie found with the title '{movie_title}'")
