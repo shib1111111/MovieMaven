@@ -7,27 +7,26 @@ st.set_page_config(page_title="Movie Details", page_icon=":movie_camera:", layou
 st.markdown(
     """
     <style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        color: #333;
-        background-color: #f9f9f9; /* lighter background color */
-    }
-    .stTextInput input {
-        background-color: #f1f3f4 !important; /* Google search bar color */
-        border-color: #f1f3f4 !important;
-        color: #333 !important;
-    }
-    .stButton button {
-        background-color: #f1f3f4 !important; /* Google search bar color */
-        border-color: #f1f3f4 !important;
-        color: #333 !important;
-    }
-    .stButton:hover button, .stTextInput:hover input {
-        background-color: #ddd !important; /* hover color */
-        border-color: #ddd !important;
-        color: #333 !important;
-    }
-</style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        .stButton button, .stTextInput input {
+            background-color: #4285F4 !important;
+            border-color: #4285F4 !important;
+            color: #fff !important;
+        }
+        .stButton:hover button, .stTextInput:hover input {
+            background-color: #2c6db8 !important;
+            border-color: #2c6db8 !important;
+            color: #fff !important;
+        }
+        .stButton:active button {
+            background-color: #ff4d4d !important;
+            border-color: #ff4d4d !important;
+        }
+    </style>
     """,
     unsafe_allow_html=True
 )
