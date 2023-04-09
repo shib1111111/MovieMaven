@@ -41,6 +41,10 @@ def recommend_movies(title):
             st.write(f"{i+1}. {movie.get('title')} ({movie.get('year')}) - Rating: {movie.get('rating')}")
     else:
         st.write('No recommendations found for this movie')
+        st.write('Displaying top 10 movies of all time:')
+        top_movies = imdb_object.get_top250_movies()
+        for i, movie in enumerate(top_movies[:10]):
+            st.write(f"{i+1}. {movie.get('title')} ({movie.get('year')}) - Rating: {movie.get('rating')}")
 
 # Create the Streamlit app
 st.title('Movie Recommendation App')
