@@ -1,4 +1,5 @@
 import streamlit as st
+st.set_option("theme", "light")
 
 # Set up the Streamlit app
 st.set_page_config(
