@@ -6,7 +6,7 @@ ia = IMDb()
 
 # Set up the Streamlit app with Bootstrap styling
 st.set_page_config(page_title='Movie details', page_icon=':movie_camera:', layout='wide')
-st.markdown('<link rel="stylesheet" type="text/css" href="./style.css">', unsafe_allow_html=True)
+st.markdown('<style>body{margin: 0;padding: 0;background-color: #f5f5f5;} .stButton button{background-color: #00bfff !important; color: white !important;}</style>', unsafe_allow_html=True)
 
 # Display the title and search box
 st.write('<h1 style="text-align:center;font-size:48px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;margin-top:50px;margin-bottom:50px;">IMDb Movie Details</h1>', unsafe_allow_html=True)
@@ -21,7 +21,7 @@ if st.button('Search', key='search_button'):
 
         # Display the movie details
         st.write(f'<h2 style="font-size:32px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;margin-top:50px;margin-bottom:25px;">{movie["title"]} ({movie["year"]})</h2>', unsafe_allow_html=True)
-        st.write('<div class="details-heading">Movie details:</div>', unsafe_allow_html=True)
+        st.write('<div style="font-size:18px;font-weight:bold;margin-bottom:10px;">Movie details:</div>', unsafe_allow_html=True)
         col1, col2 = st.columns([1, 3])
         with col1:
             st.write('**Rating:**')
@@ -36,13 +36,13 @@ if st.button('Search', key='search_button'):
                 st.write(movie['plot'][0])
             else:
                 st.write('N/A')
-            for i, person in enumerate(movie['cast'][:10]):
-                st.write(f'<div class="cast-name">{i+1}. {person}</div>', unsafe_allow_html=True)
+            for person in movie['cast'][:10]:
+                st.write(person)
             if 'recommendations' in movie:
                 for i, recommendation in enumerate(movie['recommendations'][:5]):
                     st.write(f'{i+1}. {recommendation["title"]} ({recommendation["year"]})')
             else:
-                st.write(' ')
+                st.write('N/A')    
 
 # Display the signature
-st.sidebar.markdown('<div class="signature">Created by Shibkumar</div>', unsafe_allow_html=True)
+st.write('<div style="position: fixed; bottom: 10px; right: 10px; font-size: 14px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; color: #999;">Created by Shibkumar</div>', unsafe_allow_html=True)
