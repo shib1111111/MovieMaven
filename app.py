@@ -1,4 +1,5 @@
 import streamlit as st
+from imdb import IMDb
 
 # Set up the Streamlit app
 st.set_page_config(
@@ -8,64 +9,74 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Add custom CSS
+# Adding custom CSS
 st.markdown(
-    f"""
+    """
     <style>
-        .stButton button, .stTextInput input {{
-            background-color: #2c6db8 !important;
-            border-color: #2c6db8 !important;
-            color: #fff !important;
-        }}
-        .stButton:hover button, .stTextInput:hover input {{
-            background-color: #2c6db8 !important;
-            border-color: #2c6db8 !important;
-            color: #fff !important;
-        }}
-        .stButton:active button {{
-            background-color: #ff4d4d !important;
-            border-color: #ff4d4d !important;
-        }}
-        .stImage {{
-            float: left;
-            margin-right: 1rem;
-        }}
-        .movie-details {{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            height: 100%;
-        }}
-        .movie-details h2 {{
-            margin-top: 0;
-        }}
-        @media (max-width: 768px) {{
-            .stImage {{
-                float: none;
-                margin-right: 0;
-                margin-bottom: 1rem;
-            }}
-            .movie-details {{
-                align-items: center;
-            }}
-        }}
+    .stButton button, .stTextInput input {
+        background-color: #2c6db8 !important;
+        border-color: #2c6db8 !important;
+        color: #fff !important;
+    }
+    .stButton:hover button, .stTextInput:hover input {
+        background-color: #2c6db8 !important;
+        border-color: #2c6db8 !important;
+        color: #fff !important;
+    }
+    .stButton:active button {
+        background-color: #ff4d4d !important;
+        border-color: #ff4d4d !important;
+    }
+    .movie-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        height: 100%;
+    }
+    .movie-details h2 {
+        margin-top: 0;
+    }
+    @media (max-width: 768px) {
+        .stImage {
+            float: none;
+            margin-right: 0;
+            margin-bottom: 1rem;
+        }
+        .movie-details {
+            align-items: center;
+        }
+    }
+    .animated-input {
+        animation: hue 10s infinite linear;
+        color: #007bff !important;
+    }
+    .animated-button:hover {
+        background-color: #007bff !important;
+        border-color: #007bff !important;
+    }
+    @keyframes hue {
+        0% {
+            filter: hue-rotate(0deg);
+        }
+        100% {
+            filter: hue-rotate(360deg);
+        }
+    }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# Display the app title and input field
+# Displaying the app title and input field
 st.title("MovieMaven")
 st.write('Enter a movie title (e.g. "The Godfather")')
-movie_title = st.text_input("", "")
+movie_title = st.text_input("", "", key="input", class_="animated-input")
 
-# Handle the search button click
-if st.button("Search"):
+# Handling the search button click
+if st.button("Search", class_="animated-button"):
     with st.spinner("Searching for movie..."):
         # Initialize the IMDb module
-        from imdb import IMDb
-
         ia = IMDb()
 
         # Search for the movie by title
