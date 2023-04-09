@@ -112,34 +112,34 @@ if st.button("Search"):
 
 
 
-signature = '''
-<div style="text-align: center; margin-top: 3rem;">
-  <p style="font-size: 1.5rem; font-weight: bold;">Made by <span id="signature">Made by Shib Kumar Saraf</span></p>
-</div>
+# Define a function to display the signature
+def display_signature():
+    st.sidebar.markdown(
+        """
+        <style>
+        .signature {
+            font-size: 1rem;
+            font-style: italic;
+            text-align: center;
+            padding: 1rem 0;
+            color: #333;
+            transition: color 0.5s ease-in-out;
+        }
+        .signature:hover {
+            color: #007bff;
+        }
+        </style>
+        """
+        , unsafe_allow_html=True
+    )
+    st.sidebar.markdown(
+        """
+        <div class="signature">
+        Made with ❤️ by Shib Kumar Saraf
+        </div>
+        """
+        , unsafe_allow_html=True
+    )
 
-<style>
-  #signature {
-    animation: colorchange 10s infinite;
-    -webkit-animation: colorchange 10s infinite;
-  }
-
-  @keyframes colorchange {
-    0%   {color: #007bff;}
-    25%  {color: #ff9800;}
-    50%  {color: #9c27b0;}
-    75%  {color: #4caf50;}
-    100% {color: #007bff;}
-  }
-
-  @-webkit-keyframes colorchange {
-    0%   {color: #007bff;}
-    25%  {color: #ff9800;}
-    50%  {color: #9c27b0;}
-    75%  {color: #4caf50;}
-    100% {color: #007bff;}
-  }
-</style>
-'''
-
-st.markdown(signature, unsafe_allow_html=True)
-
+# Add the signature to your Streamlit app
+display_signature()
