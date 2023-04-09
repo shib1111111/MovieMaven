@@ -8,9 +8,6 @@ ia = IMDb()
 st.set_page_config(page_title='Movie details', page_icon=':movie_camera:', layout='wide')
 st.markdown('<style>body{margin: 0;padding: 0;background-color: #f5f5f5;} .stButton button{background-color: #00bfff !important; color: white !important;}</style>', unsafe_allow_html=True)
 
-# Display the signature
-st.sidebar.markdown('<h3 style="text-align:center;font-size:16px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;color:#999;margin-bottom:10px;">Created by Shibkumar</h3>', unsafe_allow_html=True)
-
 # Display the title and search box
 st.write('<h1 style="text-align:center;font-size:48px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;margin-top:50px;margin-bottom:50px;">IMDb Movie Details</h1>', unsafe_allow_html=True)
 movie_title = st.text_input('Enter a movie title (e.g. "The Godfather")', '')
@@ -45,4 +42,7 @@ if st.button('Search', key='search_button'):
                 for i, recommendation in enumerate(movie['recommendations'][:5]):
                     st.write(f'{i+1}. {recommendation["title"]} ({recommendation["year"]})')
             else:
-                st.write(' ')    
+                st.write('N/A')    
+
+# Display the signature
+st.write('<div style="position: fixed; bottom: 10px; right: 10px; font-size: 14px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; color: #999;">Created by Shibkumar</div>', unsafe_allow_html=True)
