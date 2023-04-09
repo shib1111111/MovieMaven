@@ -2,7 +2,7 @@ import streamlit as st
 
 # Set up the Streamlit app
 st.set_page_config(
-    page_title="Movie Details",
+    page_title="MovieMaven",
     page_icon=":movie_camera:",
     layout="wide",
     initial_sidebar_state="collapsed",
