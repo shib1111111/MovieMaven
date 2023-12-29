@@ -1,5 +1,5 @@
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
-
+import torch
 def generate_movie_recommendations(input_movie_name):
     # Load pretrained GPT-2 model and tokenizer
     model_name = "gpt2"  
