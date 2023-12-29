@@ -8,12 +8,9 @@ def generate_movie_recommendations(input_movie_name):
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 
     # Generate recommendations using the language model
-    input_ids = tokenizer.encode(f"Based on the movie '{input_movie_name}', I recommend the following movies:", return_tensors="pt")
+    input_ids = tokenizer.encode(f"Based on movie '{input_movie_name}', recommended movies:", return_tensors="pt")
     output = model.generate(input_ids, max_length=100, num_beams=5, no_repeat_ngram_size=2, top_k=50, top_p=0.95, temperature=0.7)
 
     # Decode and print the generated recommendations
     recommendations = tokenizer.decode(output[0], skip_special_tokens=True).strip()
-    if recommendations:
-        st.write("**Recommendations:**", recommendations)
-    else:
-        st.write("**Recommendations:** N/A")
+    return recommendations
