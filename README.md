@@ -81,7 +81,7 @@ or directly go to deployed server url : https://shib1111111-moviemaven-app-ezbhu
 
 ## Contributing
 
-We welcome contributions to enhance QuikChat. Feel free to open issues or submit pull requests.
+We welcome contributions to enhance MovieMaven. Feel free to open issues or submit pull requests.
 
 ## License
 
