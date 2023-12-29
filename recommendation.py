@@ -13,6 +13,6 @@ def generate_movie_recommendations(input_movie_name):
     # Decode and print the generated recommendations
     recommendations = tokenizer.decode(output[0], skip_special_tokens=True).strip()
     if recommendations:
-            st.write("**Recommendations:**", recommendations)
-        else:
-                st.write("**Recommendations:** N/A")
+        st.write("**Recommendations:**", recommendations)
+    else:
+        st.write("**Recommendations:** N/A")
