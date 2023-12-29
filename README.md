@@ -6,6 +6,7 @@ MovieMaven is a Streamlit app that allows users to search for movies by title an
 
 - **Search Movies:** Users can enter a movie title in the input field and click the "Search" button to retrieve details about the movie.
 - **Display Movie Details:** The app displays comprehensive details about the searched movie, including an image, title, year, rating, genres, plot, directors, cast, writers, and more.
+- **Display Movie Recommendations:** The app generates movie recommendations using a GPT-2 language model based on the input movie's title. Users can explore suggested movies related to their search.
 - **Custom Styling:** The user interface is styled using custom CSS to enhance the visual experience.
 
 ## Getting Started
@@ -19,6 +20,7 @@ Make sure you have the following installed:
 - [Python 3.x](https://www.python.org/downloads/): The programming language used to run the app.
 - [IMDbPy library](https://imdbpy.github.io/): A Python wrapper for the IMDb API.
 - [Streamlit](https://streamlit.io/): A Python library for creating web applications.
+- [Transformers library](https://huggingface.co/transformers/): A library for state-of-the-art natural language processing models.
 
 ### Installation
 
