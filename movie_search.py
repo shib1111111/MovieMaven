@@ -63,5 +63,7 @@ def display_movie_details(movie):
                 st.write("**Writers:** N/A")
         # Generate and display movie recommendations
         recommendations = generate_movie_recommendations(movie["title"])
-        st.write("**Movie Recommendations:**")
-        st.success(recommendations)
+        if recommendations:
+            st.write(recommendations)
+        else:
+            st.write("**Recommendations:** N/A")
