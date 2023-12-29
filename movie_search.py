@@ -1,6 +1,7 @@
 # movie_search.py
 import streamlit as st
 from imdb import IMDb
+from recommendation import generate_movie_recommendations  
 
 def search_movie(movie_title):
     with st.spinner("Searching for movie..."):
@@ -60,3 +61,7 @@ def display_movie_details(movie):
             st.write("**Writers:**", ", ".join(writers_str))
         else:
                 st.write("**Writers:** N/A")
+        # Generate and display movie recommendations
+        recommendations = generate_movie_recommendations(movie["title"])
+        st.write("**Movie Recommendations:**")
+        st.success(recommendations)
