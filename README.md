@@ -11,6 +11,29 @@ MovieMaven is a Streamlit app that allows users to search for movies by title an
   
 - **Custom Styling:** The user interface is styled using custom CSS to enhance the visual experience.
 
+## Screenshots
+
+
+<table align="center">
+  <tr>
+    <td><img src="screenshots/index_page.jpg" alt="Index Page" width="800" height="600"/></td>
+  </tr>
+  <tr>
+    <td><em>Home Page</em></td>
+  </tr>
+</table>
+
+<table align="center">
+  <tr>
+    <td><img src="screenshots/home_page.jpg" alt="Home Page"  align="center" width="800" height="600"/></td>
+  </tr>
+  <tr>
+    <td><em>Home Page with outputs </em></td>
+  </tr>
+</table>
+
+
+
 ## Getting Started
 
 Before you can run the MovieMaven app, ensure that you have the necessary prerequisites installed on your machine.
