@@ -5,9 +5,12 @@ def generate_movie_recommendations(input_movie_name):
     model_name = "gpt2"  
     model = GPT2LMHeadModel.from_pretrained(model_name)
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+    # Move the model to GPU if available
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model.to(device)
 
     # Generate recommendations using the language model
-    input_ids = tokenizer.encode(f"Based on movie '{input_movie_name}', recommended movies:", return_tensors="pt")
+    input_ids = tokenizer.encode(f"Based on movie '{input_movie_name}', recommended movies:", return_tensors="pt").to(device)
     output = model.generate(input_ids, max_length=100, num_beams=5, no_repeat_ngram_size=2, top_k=50, top_p=0.95, temperature=0.7)
 
     # Decode and print the generated recommendations
