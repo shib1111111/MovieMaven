@@ -1,8 +1,9 @@
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
+import streamlit as st
 
 def generate_movie_recommendations(input_movie_name):
     # Load pretrained GPT-2 model and tokenizer
-    model_name = "gpt2"  # You can experiment with other GPT-2 variants if needed
+    model_name = "gpt2"  
     model = GPT2LMHeadModel.from_pretrained(model_name)
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 
