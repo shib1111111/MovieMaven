@@ -49,7 +49,7 @@ Make sure you have the following installed:
 
 ### Installation
 
-Follow these steps to set up the MovieMaven app on your local machine: https://shib1111111-moviemaven-app-ezbhuv.streamlit.app/
+Follow these steps to set up the MovieMaven app on your local machine: 
 
 1. **Clone the Repository:**
 
