@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 MovieMaven</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f9;
+        }
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=2525&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            padding: 5rem 0;
+            color: white;
+            text-align: center;
+        }
+        .search-form .form-control {
+            border-radius: 30px;
+            padding: 0.75rem 1.5rem;
+            border: none;
+        }
+        .search-form .btn {
+            border-radius: 30px;
+            padding: 0.75rem 2rem;
+        }
+        .section-header {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #1E3A5F;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #e0e0e0;
+            padding-bottom: 0.5rem;
+        }
+        .movie-card {
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        #movieDetailsSection .card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .signature {
+            font-size: 1rem;
+            font-style: italic;
+            text-align: center;
+            padding: 2rem 0;
+            color: #6c757d;
+            transition: color 0.3s ease;
+        }
+        .signature:hover {
+            color: #0d6efd;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">🎬 MovieMaven</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Search -->
+    <header class="hero-section">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Discover Your Next Favorite Movie</h1>
+            <p class="lead mb-4">Search for any movie and get instant details and recommendations.</p>
+            <form id="searchForm" class="d-flex justify-content-center search-form">
+                <input type="text" id="searchInput" class="form-control w-50" placeholder="e.g., The Dark Knight" required>
+                <button type="submit" class="btn btn-primary ms-2">Search</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <!-- Dynamic Content Area -->
+        <div id="contentArea">
+            <!-- Search Results will be injected here -->
+            <section id="searchResultsSection" class="d-none">
+                <h2 class="section-header">Search Results</h2>
+                <div id="searchResultsGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4"></div>
+            </section>
+
+            <!-- Movie Details will be injected here -->
+            <section id="movieDetailsSection" class="d-none"></section>
+
+            <!-- Recommendations will be injected here -->
+            <section id="recommendationsSection" class="d-none">
+                <h2 class="section-header">Recommendations</h2>
+                <div id="recommendationsGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4"></div>
+            </section>
+
+            <!-- Loader -->
+            <div id="loader" class="d-none">
+                <div class="loader"></div>
+            </div>
+
+             <!-- Initial Message -->
+            <div id="initialMessage" class="text-center text-muted">
+                <p>Search for a movie to get started!</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light py-4">
+        <div class="container">
+            <div class="signature">
+                Made By Shib Kumar Saraf
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Element References ---
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInput');
+            const loader = document.getElementById('loader');
+            const initialMessage = document.getElementById('initialMessage');
+            const searchResultsSection = document.getElementById('searchResultsSection');
+            const searchResultsGrid = document.getElementById('searchResultsGrid');
+            const movieDetailsSection = document.getElementById('movieDetailsSection');
+            const recommendationsSection = document.getElementById('recommendationsSection');
+            const recommendationsGrid = document.getElementById('recommendationsGrid');
+
+            // --- API Configuration ---
+            const API_BASE_URL = 'https://api.themoviedb.org/3';
+            const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+            
+            // IMPORTANT: Your API key is hardcoded here.
+            // This is not secure for a production application.
+            const API_KEY = 'bbe021b11bae78e004c7ac999dbb6252'; 
+
+            // --- UI State Management ---
+            const showLoader = () => loader.classList.remove('d-none');
+            const hideLoader = () => loader.classList.add('d-none');
+            
+            const clearContent = () => {
+                searchResultsSection.classList.add('d-none');
+                movieDetailsSection.classList.add('d-none');
+                recommendationsSection.classList.add('d-none');
+                initialMessage.classList.add('d-none');
+                searchResultsGrid.innerHTML = '';
+                movieDetailsSection.innerHTML = '';
+                recommendationsGrid.innerHTML = '';
+            };
+
+            // --- API Fetch Function ---
+            const fetchFromTMDb = async (endpoint, params = '') => {
+                if (!API_KEY || API_KEY === 'YOUR_TMDB_API_KEY_HERE') {
+                    alert('API Key is not set correctly in the HTML file. Please replace "YOUR_TMDB_API_KEY_HERE" with your actual key.');
+                    return null;
+                }
+                const url = `${API_BASE_URL}/${endpoint}?api_key=${API_KEY}&language=en-US&${params}`;
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.statusText} (Status: ${response.status})`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('Failed to fetch from TMDb:', error);
+                    alert(`Error fetching data: ${error.message}. Please check your API key and network connection.`);
+                    return null;
+                }
+            };
+
+            // --- Rendering Functions ---
+            const renderMovieCard = (movie) => {
+                const posterPath = movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : 'https://placehold.co/500x750/6c757d/ffffff?text=No+Poster';
+                const card = document.createElement('div');
+                card.className = 'col';
+                card.innerHTML = `
+                    <div class="card h-100 movie-card shadow-sm" data-movie-id="${movie.id}">
+                        <img src="${posterPath}" class="card-img-top" alt="${movie.title}">
+                        <div class="card-body">
+                            <h6 class="card-title fw-bold">${movie.title}</h6>
+                        </div>
+                    </div>
+                `;
+                card.querySelector('.movie-card').addEventListener('click', () => fetchAndDisplayMovieDetails(movie.id));
+                return card;
+            };
+
+            const renderSearchResults = (movies) => {
+                clearContent();
+                if (movies && movies.length > 0) {
+                    searchResultsSection.classList.remove('d-none');
+                    movies.forEach(movie => {
+                        searchResultsGrid.appendChild(renderMovieCard(movie));
+                    });
+                } else {
+                    searchResultsSection.classList.remove('d-none');
+                    searchResultsGrid.innerHTML = '<p class="text-muted">No movies found for your search.</p>';
+                }
+            };
+
+            const renderMovieDetails = (movie) => {
+                const posterPath = movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : 'https://placehold.co/500x750/6c757d/ffffff?text=No+Poster';
+                const genres = movie.genres.map(g => g.name).join(', ');
+                const directors = movie.credits.crew.filter(c => c.job === 'Director').map(d => d.name).join(', ');
+                const cast = movie.credits.cast.slice(0, 10).map(c => `<li>${c.name} as <em>${c.character}</em></li>`).join('');
+
+                movieDetailsSection.classList.remove('d-none');
+                movieDetailsSection.innerHTML = `
+                    <div class="card mb-5">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="${posterPath}" class="img-fluid rounded-start" alt="${movie.title}">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body p-4">
+                                    <h2 class="card-title fw-bold">${movie.title} (${movie.release_date.substring(0, 4)})</h2>
+                                    <p class="card-text"><small class="text-muted">${genres}</small></p>
+                                    <p class="card-text"><strong>Rating:</strong> ${movie.vote_average.toFixed(1)}/10 ⭐</p>
+                                    <p class="card-text"><strong>Director(s):</strong> ${directors || 'N/A'}</p>
+                                    <h5 class="mt-4">Plot Summary</h5>
+                                    <p>${movie.overview}</p>
+                                    <h5 class="mt-4">Top Billed Cast</h5>
+                                    <ul>${cast}</ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            };
+            
+            const renderRecommendations = (movies) => {
+                if (movies && movies.length > 0) {
+                    recommendationsSection.classList.remove('d-none');
+                    movies.slice(0, 10).forEach(movie => {
+                        recommendationsGrid.appendChild(renderMovieCard(movie));
+                    });
+                }
+            };
+
+            // --- Core Logic Functions ---
+            const handleSearch = async (event) => {
+                event.preventDefault();
+                const query = searchInput.value.trim();
+                if (!query) return;
+
+                clearContent();
+                showLoader();
+                const data = await fetchFromTMDb('search/movie', `query=${encodeURIComponent(query)}`);
+                hideLoader();
+                if (data) {
+                    renderSearchResults(data.results);
+                }
+            };
+
+            const fetchAndDisplayMovieDetails = async (movieId) => {
+                clearContent();
+                showLoader();
+                
+                // Fetch details and recommendations in parallel
+                const [detailsData, recommendationsData] = await Promise.all([
+                    fetchFromTMDb(`movie/${movieId}`, 'append_to_response=credits'),
+                    fetchFromTMDb(`movie/${movieId}/recommendations`)
+                ]);
+
+                hideLoader();
+                
+                if (detailsData) {
+                    renderMovieDetails(detailsData);
+                }
+                if (recommendationsData) {
+                    renderRecommendations(recommendationsData.results);
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            // --- Initial Setup ---
+            const initializeApp = () => {
+                searchForm.addEventListener('submit', handleSearch);
+            };
+
+            initializeApp();
+        });
+    </script>
+</body>
+</html>
